@@ -84,7 +84,7 @@ fun ProfileScreen(
             value = name,
             onValueChange = { name = it },
             label = { Text("Name") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxSize()
         )
         Spacer(Modifier.height(10.dp))
         OutlinedTextField(
