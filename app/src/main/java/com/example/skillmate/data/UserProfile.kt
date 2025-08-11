@@ -11,5 +11,6 @@ data class UserProfile(
     val isPublic: Boolean = true,
     val avgRating: Double = 0.0,
     val isOpenToSwap: Boolean = true,
-    val aboutMe: String = ""
+    val aboutMe: String = "",
+    val lastUpdated: Long = System.currentTimeMillis()
 ) 

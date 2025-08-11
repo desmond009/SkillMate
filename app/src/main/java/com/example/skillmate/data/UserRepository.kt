@@ -32,4 +32,8 @@ class UserRepository(private val db: FirebaseFirestore = FirebaseFirestore.getIn
         query.documents.mapNotNull { it.toObject(UserProfile::class.java) }
             .filter { it.id != excludeUserId }
     }
+
+    suspend fun deleteUser(userId: String): Result<Unit> = runCatching {
+        users.document(userId).delete().await()
+    }
 } 

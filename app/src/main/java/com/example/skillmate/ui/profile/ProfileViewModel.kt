@@ -21,10 +21,13 @@ class ProfileViewModel @Inject constructor(
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
+    private val _successMessage = MutableStateFlow<String?>(null)
+    val successMessage: StateFlow<String?> = _successMessage.asStateFlow()
 
     fun loadProfile(userId: String) {
         _isLoading.value = true
         _error.value = null
+        _successMessage.value = null
         viewModelScope.launch {
             val result = userRepository.getUser(userId)
             _isLoading.value = false
@@ -36,11 +39,34 @@ class ProfileViewModel @Inject constructor(
     fun saveProfile(profile: UserProfile) {
         _isLoading.value = true
         _error.value = null
+        _successMessage.value = null
         viewModelScope.launch {
             val result = userRepository.createOrUpdateUser(profile)
             _isLoading.value = false
-            result.onSuccess { _profile.value = profile }
+            result.onSuccess { 
+                _profile.value = profile
+                _successMessage.value = "Profile saved successfully!"
+            }
             result.onFailure { _error.value = it.message }
         }
+    }
+
+    fun deleteProfile(userId: String) {
+        _isLoading.value = true
+        _error.value = null
+        _successMessage.value = null
+        viewModelScope.launch {
+            val result = userRepository.deleteUser(userId)
+            _isLoading.value = false
+            result.onSuccess { 
+                _profile.value = null
+                _successMessage.value = "Profile deleted successfully"
+            }
+            result.onFailure { _error.value = it.message }
+        }
+    }
+
+    fun clearSuccessMessage() {
+        _successMessage.value = null
     }
 } 
